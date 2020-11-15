@@ -81,15 +81,38 @@ function turnHoursToMinutes(movies) {
 // BONUS - Iteration 8: Best yearly rate average - Best yearly rate average
 
 function bestYearAvg(movies) {
-    let avgOfYears = [];
-    let currentYearArray = movies.filter(function(movie){
-        avgOfYears += [{year: movie.year, avg: ratesAverage(currentYearArray)}];
-        return movie.year === movie.year
-    });
-    let sortAvgOfYears = avgOfYears.sort(function (a, b) {
-        return b.year - a.year
-    });
-    let bestYear = sortAvgOfYears.slice(0,0);
-    return `The best year was ${bestYear.year} with an average rate of ${bestYear.avg}`
+    if(movies.length === 0) {
+        return null;
+    } else {
+    let yearsArray = movies.map(movie => movie.year);
 
-} 
+    let uniqueYearsArray = [];
+    for (let i = 0; i < yearsArray.length; i++) {
+        let value = yearsArray[i];
+        if (uniqueYearsArray.indexOf(value) !== -1) {
+            continue
+          } else {
+            uniqueYearsArray.push(value);
+          }
+        }
+    
+    let avgOfYears = [];
+    for (let i=0; i<uniqueYearsArray.length; i++) {
+        let currentYearArray = movies.filter(function(movie){
+            return movie.year === uniqueYearsArray[i];
+        });
+        avgOfYears.push({year: uniqueYearsArray[i], avg: ratesAverage(currentYearArray)});
+    }
+
+    avgOfYears.sort(function (a, b) {
+        if(a.avg === b.avg) {
+            return a.year < b.year ? -1 : a.year > b.year ? 1 : 0;
+        } else {
+            return b.avg - a.avg;
+        }
+    });
+
+    return `The best year was ${avgOfYears[0].year} with an average rate of ${avgOfYears[0].avg}`
+    }
+}
+ 
